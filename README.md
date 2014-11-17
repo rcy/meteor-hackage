@@ -23,5 +23,5 @@ hackage iron:router
 ```
 
 At this point we have a iron:router fork with source in
-`myapp/packages/iron-router` which we can hack on in the context of
-our application and easily make pull requests.
+`/tmp/iron-router` which is symlinked to `.packages/iron:router` which
+we can hack on in the context of our application.
