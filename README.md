@@ -22,6 +22,6 @@ meteor add iron:router
 hackage iron:router
 ```
 
-At this point we have a the iron:router git repo cloned into
-`/tmp/iron-router` which is symlinked to `.packages/iron:router` which
-we can hack on in the context of our application.
+At this point we will have the iron:router git repo cloned into
+`/tmp/iron-router` and symlinked to `myapp/.packages/iron:router`
+which we can hack on in the context of our application.
