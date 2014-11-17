@@ -26,7 +26,7 @@ function linkPackage(dirname, pkg) {
   var dstpath = './packages/' + pkg;
 
   if (!fs.existsSync('./packages')) {
-    console.log('creating ./packages directory');
+    console.log('created ./packages directory');
     fs.mkdirSync('./packages');
   }
   if (!fs.existsSync(dstpath)) {
