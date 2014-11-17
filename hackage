@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+// -*- javascript -*-
+
+var execFile = require('child_process').execFile;
+var fs = require('fs');
+var proc;
+
+var pkg = process.argv[2];
+if (!pkg) {
+  console.error('usage: hackage package-name');
+  process.exit(1);
+}
+
+function checkerr(error) {
+  if (error) {
+    console.error(error);
+    process.exit(1);
+  }
+}
+
+function logerr(str) {
+  if (str)
+    console.error(str);
+}
+
+function linkPackage(dirname, pkg) {
+  var dstpath = './packages/' + pkg;
+
+  if (!fs.existsSync('./packages')) {
+    console.log('creating ./packages directory');
+    fs.mkdirSync('./packages');
+  }
+  if (!fs.existsSync(dstpath)) {
+    fs.symlinkSync(dirname, dstpath);
+    console.log('symlinked ' + dirname + ' to ' + dstpath);
+  } else {
+    console.log(dirname + ' already symlinked to ' + dstpath);
+  }
+}
+
+proc = execFile('meteor', ['show', pkg], function (error, stdout, stderr) {
+  checkerr(error);
+  logerr(stderr);
+
+  var match = stdout.match('Git repository at: (.+/(.+)(\.git)?)');
+  var repo, dirname;
+  if (!match) {
+    console.log('no git repo found for ' + pkg);
+    process.exit(0);
+  } else {
+    repo = match[1];
+    dirname = '/tmp/'+match[2];
+    console.log('Git repo for ' + pkg + ' found at ' + repo);
+    if (fs.existsSync(dirname)) {
+      console.log(dirname + ' already exists');
+      linkPackage(dirname, pkg);
+    } else {
+      console.log('cloning into ' + dirname);
+      execFile('git', ['clone', repo, dirname], function (error, stdout, stderr) {
+        checkerr(error);
+        logerr(stderr);
+        console.log(stdout);
+
+        linkPackage(dirname, pkg);
+      });
+    }
+  }
+});
