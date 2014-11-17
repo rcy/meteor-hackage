@@ -3,7 +3,6 @@
 
 var execFile = require('child_process').execFile;
 var fs = require('fs');
-var proc;
 
 var pkg = process.argv[2];
 if (!pkg) {
@@ -38,7 +37,7 @@ function linkPackage(dirname, pkg) {
   }
 }
 
-proc = execFile('meteor', ['show', pkg], function (error, stdout, stderr) {
+execFile('meteor', ['show', pkg], function (error, stdout, stderr) {
   checkerr(error);
   logerr(stderr);
 
